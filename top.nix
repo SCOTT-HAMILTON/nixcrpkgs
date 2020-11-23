@@ -1,4 +1,4 @@
-{ nixpkgs, macos_sdk }:
+{ nixpkgs }:
 
 rec {
   inherit nixpkgs;
@@ -17,7 +17,6 @@ rec {
       arch = "armv6";
       gcc_options = "--with-fpu=vfp --with-float=hard ";
     };
-    macos = import ./macos { inherit native macos_sdk; };
   };
 
   pkgFun = crossenv: import ./pkgs.nix { inherit crossenv; } // crossenv;
@@ -28,7 +27,6 @@ rec {
   i686-linux-musl = pkgFun crossenvs.i686-linux-musl;
   x86_64-linux-musl = pkgFun crossenvs.x86_64-linux-musl;
   armv6-linux-musl = pkgFun crossenvs.armv6-linux-musl;
-  macos = pkgFun crossenvs.macos;
 
   envs = [
     i686-w64-mingw32
@@ -36,7 +34,6 @@ rec {
     i686-linux-musl
     x86_64-linux-musl
     armv6-linux-musl
-    macos
   ];
 
   # omni is convenient name for packages that are used for cross-compiling but
@@ -54,7 +51,6 @@ rec {
   linux-x86_64 = x86_64-linux-musl;
   linux-rpi = armv6-linux-musl;
   rpi = armv6-linux-musl;
-  mac = macos;
 
   # filter is a function that can be applied to a local directory to filter out
   # files that are likely to change frequently without affecting the build,
